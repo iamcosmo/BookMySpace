@@ -3,14 +3,20 @@ import {
   Container,
   Typography,
   TextField,
+  Select,
   Checkbox,
   Button,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  useTheme,
 } from "@mui/material";
 import "../styles/authorization.css";
 import IconButton from "@mui/material/IconButton";
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { styled } from "@mui/system";
+//import ThemedFormControl from "./ThemedFormControl";
 
 const FormOutline = styled("div")({
   marginBottom: "1rem",
@@ -37,7 +43,7 @@ const SignupForm = (props) => {
   const [password, setPassword] = useState("");
   const [contact, setContact] = useState("");
   const [isChecked, setIsChecked] = useState(true);
-
+  const [userType, setUserType] = useState("");
   const [showPassword, setShowPassword] = React.useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -64,6 +70,11 @@ const SignupForm = (props) => {
 
   const handleCheckboxChange = (event) => {
     setIsChecked(event.target.checked);
+  };
+
+  const handleUserTypeChange = (event) => {
+    // Define handleUserTypeChange function
+    setUserType(event.target.value);
   };
 
   const [subtype, setSubtype] = useState(0);
@@ -165,20 +176,72 @@ const SignupForm = (props) => {
                     />
                   </FormOutline>
 
+                  <FormControl sx={{ m: 0, minWidth: 380 }}>
+                    {/* <FormControl style={formControlStyle} {...props}> */}
+                    {/* <ThemedFormControl> */}
+                    <InputLabel
+                      id="demo-simple-select-autowidth-label"
+                      sx={{ color: "#81084D" }}
+                      color="secondary"
+                    >
+                      User Type
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-autowidth-label"
+                      id="user-type-select"
+                      value={userType}
+                      onChange={handleUserTypeChange}
+                      label="User Type"
+                      color="secondary"
+                      sx={{
+                        width: "100%",
+                        color: "#000000",
+                        borderColor: "#81084D",
+                        outlineColor: "#81084D",
+                        backgroundColor: "inherit",
+                      }}
+                      variant="outlined"
+                    >
+                      <MenuItem
+                        sx={{ color: "#000000", backgroundColor: "#e7e2fd" }}
+                        value="standard"
+                      >
+                        Standard
+                      </MenuItem>
+                      <MenuItem
+                        sx={{ color: "#000000", backgroundColor: "#e7e2fd" }}
+                        value="premium"
+                      >
+                        Premium
+                      </MenuItem>
+                      <MenuItem
+                        sx={{ color: "#000000", backgroundColor: "#e7e2fd" }}
+                        value="admin"
+                      >
+                        Admin
+                      </MenuItem>
+                    </Select>
+                    {/* </ThemedFormControl> */}
+                  </FormControl>
+
                   <FormOutline>
                     <TextField
                       id="form3Example4"
                       label="Password"
                       variant="outlined"
                       fullWidth
-                      type={showPassword?"text":"password"}
+                      type={showPassword ? "text" : "password"}
                       value={password}
                       color="secondary"
                       onChange={handlePasswordChange}
                       InputProps={{
                         endAdornment: (
                           <IconButton onClick={handleClickShowPassword}>
-                            {showPassword?<VisibilityOffIcon color="secondary" />:<VisibilityIcon color="secondary"/>}
+                            {showPassword ? (
+                              <VisibilityOffIcon color="secondary" />
+                            ) : (
+                              <VisibilityIcon color="secondary" />
+                            )}
                           </IconButton>
                         ),
                         style: { color: "#000000" },

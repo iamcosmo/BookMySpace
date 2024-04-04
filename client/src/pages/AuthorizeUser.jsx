@@ -67,7 +67,7 @@ const AuthorizeUser = () => {
         backgroundColor: "rgba(0, 0, 0, 0.5)", // Adjust the opacity and color as needed
         backdropFilter: "blur(10px)", // Adjust the blur strength as needed
         WebkitBackdropFilter: "blur(10px)", // For Safari
-        height: "100vh",
+        height: "auto",
       }}
     >
       <Box sx={{ width: "100%" }}>

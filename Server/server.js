@@ -4,8 +4,10 @@ import morgan from "morgan";
 import cors from "cors";
 import dotenv from "dotenv";
 import { connectDB } from "./config/db.js";
-import { Photographer } from "./model/Photographermodel.js";
-import { TrialData } from "./model/Trialdata.js";
+import { Photographer } from "./models/photographer.model.js";
+import { TrialData } from "./models/trial.model.js";
+import authRouter from "./routes/auth.routes.js";
+
 
 dotenv.config();
 
@@ -18,6 +20,11 @@ app.use(morgan("dev"));
 
 // Database connection
 connectDB();
+
+
+app.use("/auth",authRouter)
+
+
 
 // Routes
 app.get("/", (req, res) => {
@@ -89,9 +96,7 @@ app.get("/photographers", async (req, res) => {
 
 
 
-app.post("/signup",(req,res)=>{
-  
-});
+
 
 
 const PORT = process.env.PORT || 3002;
