@@ -15,7 +15,6 @@ import Decorator from "./components2/decorator";
 import Basic from "./pages/Basic";
 import AboutUs from "./pages/AboutUs";
 import AuthorizeUser from "./pages/AuthorizeUser";
-import SignupForm from "./components/SignupForm";
 function App() {
   return (
     <>

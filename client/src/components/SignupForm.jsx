@@ -16,6 +16,8 @@ import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { styled } from "@mui/system";
+
+import { Axios } from "axios";
 //import ThemedFormControl from "./ThemedFormControl";
 
 const FormOutline = styled("div")({
@@ -270,7 +272,7 @@ const SignupForm = (props) => {
                     sx={{ backgroundColor: "#81084D" }}
                     fullWidth
                   >
-                    Sign up
+                    {props.formLabel}
                   </Button>
 
                   <div className="text-center">

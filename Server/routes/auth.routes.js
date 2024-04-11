@@ -1,6 +1,6 @@
 import express from "express";
 
-import { signUpUser } from "../middlewares/auth.middleware.js";
+import { signUpUser } from "../controllers/auth.controller.js";
 
 const authRouter = express.Router();
 
