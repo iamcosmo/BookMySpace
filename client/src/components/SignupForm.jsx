@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Container,
   Typography,
@@ -17,8 +18,9 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { styled } from "@mui/system";
 
-import { Axios } from "axios";
+import axios from '../config/axiosConfig'
 //import ThemedFormControl from "./ThemedFormControl";
+import { Photographer } from "./../../../Server/models/photographer.model";
 
 const FormOutline = styled("div")({
   marginBottom: "1rem",
@@ -47,6 +49,14 @@ const SignupForm = (props) => {
   const [isChecked, setIsChecked] = useState(true);
   const [userType, setUserType] = useState("");
   const [showPassword, setShowPassword] = React.useState(false);
+
+  const userTypeData = [
+    { label: 'Customer', value: 'user' },
+    { label: 'Caterer', value: 'caterer' },
+    { label: 'Photographer', value: 'photographer' },
+    { label: 'Decorator', value: 'decorator' }
+  ];
+  const navigate = useNavigate();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -86,6 +96,31 @@ const SignupForm = (props) => {
     else setSubtype(0);
   }, [props.formLabel]);
 
+  const registerLoginUser = async (ev) => {
+    ev.preventDefault();
+
+    try {
+      if (subtype === 1) {
+        const { status, user } = await axios.post("/auth", {
+          firstname:firstName,
+          lastname:lastName,
+          email:email,
+          contact:contact,
+          usertype:userType,
+          password:password,
+        });
+        if (status === 200) {
+          alert("Registration Successful!! Can login noW");
+          navigate("/");
+        } else {
+          alert("Registration Failed");
+        }
+      }
+    } catch (err) {
+      alert(err);
+    }
+  };
+
   return (
     <section
       style={{ background: "linear-gradient(to bottom, #0a2e51, #9d50bb)" }}
@@ -118,7 +153,7 @@ const SignupForm = (props) => {
           <div className="col-lg-6 mb-5 mb-lg-0 position-relative">
             <GlassCard className="card bg-glass">
               <div className="card-body px-4 py-5 px-md-5">
-                <form>
+                <form onSubmit={registerLoginUser}>
                   <div className="row">
                     {subtype === 1 && (
                       <>
@@ -204,7 +239,17 @@ const SignupForm = (props) => {
                       }}
                       variant="outlined"
                     >
-                      <MenuItem
+                      {userTypeData.map((data, index) => (
+                        <MenuItem
+                          key={index}
+                          sx={{ color: "#000000", backgroundColor: "#e7e2fd" }}
+                          value={data.value}
+                        >
+                          {data.label}
+                        </MenuItem>
+                      ))}
+
+                      {/* <MenuItem
                         sx={{ color: "#000000", backgroundColor: "#e7e2fd" }}
                         value="standard"
                       >
@@ -221,7 +266,7 @@ const SignupForm = (props) => {
                         value="admin"
                       >
                         Admin
-                      </MenuItem>
+                      </MenuItem> */}
                     </Select>
                     {/* </ThemedFormControl> */}
                   </FormControl>
@@ -271,6 +316,7 @@ const SignupForm = (props) => {
                     variant="contained"
                     sx={{ backgroundColor: "#81084D" }}
                     fullWidth
+                    onClick={registerLoginUser}
                   >
                     {props.formLabel}
                   </Button>
