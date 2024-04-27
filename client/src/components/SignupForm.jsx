@@ -20,6 +20,7 @@ import { styled } from "@mui/system";
 
 import axios from "../config/axiosConfig";
 import { useSignup } from "../hooks/useSignup";
+import {useLogin} from "../hooks/useLogin";
 
 const FormOutline = styled("div")({
   marginBottom: "1rem",
@@ -42,6 +43,11 @@ const GlassCard = styled("div")({
 const SignupForm = (props) => {
   //Destructuring the SignUp Hook
   const { signup, isLoading, error } = useSignup();
+  
+  //Destructuring the Log IN Hook
+  const { logmein, isLoginLoading, loginError } = useLogin();
+
+
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -111,18 +117,23 @@ const SignupForm = (props) => {
     try {
         if (subtype === 1) {
             console.log("Registration Initiated!");
-            await signup(firstName, lastName, contact, email, userType, password);
-        } else {
-            console.log("Login Initiated");
-            const response = await axios.post("/auth/login", {
-                email: email,
-                password: password,
-                usertype: userType,
-            });
+            const response = await signup(firstName, lastName, contact, email, userType, password);
 
             if (response?.status === 200) {
-                console.log(response.data);
+              alert("Registration!!! Successful");
+          }
+          else{
+            console.log(loginError);
+          }
+        } else {
+            console.log("Login Initiated");
+            const response = await logmein(email,userType,password);
+
+            if (response?.status === 200) {
                 alert("Just Logged In..!!! Successfully");
+            }
+            else{
+              console.log(error);
             }
         }
     } catch (error) {
@@ -319,12 +330,12 @@ const SignupForm = (props) => {
                     sx={{ backgroundColor: "#81084D" }}
                     fullWidth
                     onClick={registerLoginUser}
-                    disabled={isLoading || !loggedStatus}
+                    disabled={isLoading|| isLoginLoading || !loggedStatus}
                   >
                     {props.formLabel}
-                    {/* {!loggedStatus ? props.formLabel : `Log Out`} */}
                   </Button>
                   {error && <div className="error">{error}</div>}
+                  {loginError && <div className="error">{loginError}</div>}
                   <div className="text-center">
                     <Typography variant="body1">or sign up with:</Typography>
                     <IconButton

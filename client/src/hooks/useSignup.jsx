@@ -33,11 +33,10 @@ export const useSignup = () =>{
                 setIsLoading(false)
             } else {
                 setIsLoading(false);
-                setError("Signup failed. Please try again.");
+                setError("Signup failed. Please try again.",json.error);
             }
         } catch (error) {
-            console.error("Signup failed:", error);
-            setError("Signup failed. Please try again.");
+            setError("Signup failed. Please try again.",error);
         } finally {
             setIsLoading(false);
         }
