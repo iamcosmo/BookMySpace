@@ -17,19 +17,19 @@ const userdataSchema = mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique: true, // Ensure email uniqueness
-    lowercase: true, // Convert email to lowercase before saving
-    trim: true, // Trim whitespace from email
-    match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, // Simple email format validation
+    unique: true, 
+    lowercase: true, 
+    trim: true, 
+    match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, 
   },
   contact: {
-    type: String, // Store contact number as string
+    type: String, 
     required: true,
   },
   usertype: {
     type: String,
     required: true,
-    enum: ["user", "caterer", "photographer", "decorator"], // Example of enum validation
+    enum: ["user", "caterer", "photographer", "decorator"], 
   },
   password: {
     type: String,

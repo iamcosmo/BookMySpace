@@ -8,6 +8,7 @@ import Avatar from "@mui/material/Avatar";
 import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useLogout } from "../hooks/useLogout";
 function stringToColor(string) {
   let hash = 0;
   let i;
@@ -80,11 +81,25 @@ const ColorButton = styled(Button)(({ theme }) => ({
 
 const Navbar = () => {
   const [activeRoute, setActiveRoute] = useState("/");
+  const [loggedStatus, setLoggedStatus] = useState(false);
   const location = useLocation();
+  const { logmeout } = useLogout();
+
+  const handleLogout = () => {
+    logmeout();
+  };
 
   useEffect(() => {
     setActiveRoute(location.pathname);
   }, [location]);
+
+  const user = localStorage.getItem("user");
+  useEffect(() => {
+    if (user) setLoggedStatus(true);
+    else setLoggedStatus(false);
+
+  }, [user]);
+
   return (
     <>
       <div id="nav-logo">
@@ -179,10 +194,17 @@ const Navbar = () => {
             className={activeRoute === "/authorizeme" ? "active-button" : ""}
             sx={{ marginRight: "0.4rem" }}
             size="medium"
+            onClick={loggedStatus ? handleLogout : undefined}
           >
-            <Link to="/authorizeme" className="decorationNone">
-              SignUP
-            </Link>
+            { !loggedStatus ? (
+              <Link to="/authorizeme" className="decorationNone">
+                SignUP
+              </Link>
+            ) : (
+              <Link to="/authorizeme" className="decorationNone">
+                LogOut
+              </Link>
+            )}
           </ColorButton>
           {/* <Avatar {...stringAvatar("Kent Dodds")} /> */}
           {/* <StyledBadge

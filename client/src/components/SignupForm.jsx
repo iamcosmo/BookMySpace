@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Container,
@@ -18,9 +18,8 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { styled } from "@mui/system";
 
-import axios from '../config/axiosConfig'
-//import ThemedFormControl from "./ThemedFormControl";
-import { Photographer } from "./../../../Server/models/photographer.model";
+import axios from "../config/axiosConfig";
+import { useSignup } from "../hooks/useSignup";
 
 const FormOutline = styled("div")({
   marginBottom: "1rem",
@@ -41,6 +40,9 @@ const GlassCard = styled("div")({
 });
 
 const SignupForm = (props) => {
+  //Destructuring the SignUp Hook
+  const { signup, isLoading, error } = useSignup();
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -49,16 +51,19 @@ const SignupForm = (props) => {
   const [isChecked, setIsChecked] = useState(true);
   const [userType, setUserType] = useState("");
   const [showPassword, setShowPassword] = React.useState(false);
+  const [loggedStatus, setLoggedStatus] = useState(false);
 
   const userTypeData = [
-    { label: 'Customer', value: 'user' },
-    { label: 'Caterer', value: 'caterer' },
-    { label: 'Photographer', value: 'photographer' },
-    { label: 'Decorator', value: 'decorator' }
+    { label: "Customer", value: "user" },
+    { label: "Caterer", value: "caterer" },
+    { label: "Photographer", value: "photographer" },
+    { label: "Decorator", value: "decorator" },
   ];
   const navigate = useNavigate();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleLoggedStatus = () => setLoggedStatus((logged) => !logged);
 
   const handleFirstNameChange = (event) => {
     setFirstName(event.target.value);
@@ -85,7 +90,6 @@ const SignupForm = (props) => {
   };
 
   const handleUserTypeChange = (event) => {
-    // Define handleUserTypeChange function
     setUserType(event.target.value);
   };
 
@@ -96,24 +100,34 @@ const SignupForm = (props) => {
     else setSubtype(0);
   }, [props.formLabel]);
 
+  const user = localStorage.getItem("user");
+  useEffect(() => {
+    setLoggedStatus(user === null);
+  }, [user]);
+
   const registerLoginUser = async (ev) => {
     ev.preventDefault();
 
     try {
       if (subtype === 1) {
-        const { status, user } = await axios.post("/auth", {
-          firstname:firstName,
-          lastname:lastName,
-          email:email,
-          contact:contact,
-          usertype:userType,
-          password:password,
-        });
-        if (status === 200) {
-          alert("Registration Successful!! Can login noW");
-          navigate("/");
-        } else {
-          alert("Registration Failed");
+        console.log("Registration Initiated!");
+        await signup(firstName, lastName, contact, email, userType, password);
+      } else {
+        console.log("Login Initiated");
+        try {
+          const response = await axios.post("/auth/login", {
+            email: email,
+            password: password,
+            usertype: userType,
+          });
+
+          if (response?.status === 200) {
+            console.log(response.data);
+
+            alert("Just Logged In..!!! Successfully");
+          }
+        } catch (err) {
+          alert("Login Failed", err);
         }
       }
     } catch (err) {
@@ -199,23 +213,22 @@ const SignupForm = (props) => {
                       InputProps={{ style: { color: "#000000" } }}
                     />
                   </FormOutline>
-                  <FormOutline>
-                    <TextField
-                      id="form3Example4"
-                      label="Contact"
-                      variant="outlined"
-                      fullWidth
-                      type="number"
-                      value={contact}
-                      color="secondary"
-                      onChange={handleContactChange}
-                      InputProps={{ style: { color: "#000000" } }}
-                    />
-                  </FormOutline>
-
+                  {subtype === 1 && (
+                    <FormOutline>
+                      <TextField
+                        id="form3Example4"
+                        label="Contact"
+                        variant="outlined"
+                        fullWidth
+                        type="number"
+                        value={contact}
+                        color="secondary"
+                        onChange={handleContactChange}
+                        InputProps={{ style: { color: "#000000" } }}
+                      />
+                    </FormOutline>
+                  )}
                   <FormControl sx={{ m: 0, minWidth: 380 }}>
-                    {/* <FormControl style={formControlStyle} {...props}> */}
-                    {/* <ThemedFormControl> */}
                     <InputLabel
                       id="demo-simple-select-autowidth-label"
                       sx={{ color: "#81084D" }}
@@ -248,27 +261,7 @@ const SignupForm = (props) => {
                           {data.label}
                         </MenuItem>
                       ))}
-
-                      {/* <MenuItem
-                        sx={{ color: "#000000", backgroundColor: "#e7e2fd" }}
-                        value="standard"
-                      >
-                        Standard
-                      </MenuItem>
-                      <MenuItem
-                        sx={{ color: "#000000", backgroundColor: "#e7e2fd" }}
-                        value="premium"
-                      >
-                        Premium
-                      </MenuItem>
-                      <MenuItem
-                        sx={{ color: "#000000", backgroundColor: "#e7e2fd" }}
-                        value="admin"
-                      >
-                        Admin
-                      </MenuItem> */}
                     </Select>
-                    {/* </ThemedFormControl> */}
                   </FormControl>
 
                   <FormOutline>
@@ -317,10 +310,12 @@ const SignupForm = (props) => {
                     sx={{ backgroundColor: "#81084D" }}
                     fullWidth
                     onClick={registerLoginUser}
+                    disabled={isLoading || !loggedStatus}
                   >
                     {props.formLabel}
+                    {/* {!loggedStatus ? props.formLabel : `Log Out`} */}
                   </Button>
-
+                  {error && <div className="error">{error}</div>}
                   <div className="text-center">
                     <Typography variant="body1">or sign up with:</Typography>
                     <IconButton
