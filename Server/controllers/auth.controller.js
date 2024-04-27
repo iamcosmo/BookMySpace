@@ -45,9 +45,7 @@ export const signUpUser = async (req, res) => {
 export const logInUser = async (req, res) => {
   try {
     const { email, password, usertype } = req.body;
-    console.log('email: ',email,'  password: ',password,'  usertype: ',usertype);
     if (!email || !password || !usertype) {
-      console.log('email: ',email,'  password: ',password,'  usertype: ',usertype);
       return res.status(404).send({
         sucess: false,
         message: "Invalid email or Password",
@@ -123,7 +121,6 @@ export const getUserProfile = async (req, res) => {
     
     res.status(200).json(user);
   } catch (error) {
-    console.error('Error fetching user profile:', error);
     if (error.name === 'JsonWebTokenError') {
       return res.status(401).json({ message: "Invalid token" });
     }

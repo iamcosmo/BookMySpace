@@ -109,31 +109,40 @@ const SignupForm = (props) => {
     ev.preventDefault();
 
     try {
-      if (subtype === 1) {
-        console.log("Registration Initiated!");
-        await signup(firstName, lastName, contact, email, userType, password);
-      } else {
-        console.log("Login Initiated");
-        try {
-          const response = await axios.post("/auth/login", {
-            email: email,
-            password: password,
-            usertype: userType,
-          });
+        if (subtype === 1) {
+            console.log("Registration Initiated!");
+            await signup(firstName, lastName, contact, email, userType, password);
+        } else {
+            console.log("Login Initiated");
+            const response = await axios.post("/auth/login", {
+                email: email,
+                password: password,
+                usertype: userType,
+            });
 
-          if (response?.status === 200) {
-            console.log(response.data);
-
-            alert("Just Logged In..!!! Successfully");
-          }
-        } catch (err) {
-          alert("Login Failed", err);
+            if (response?.status === 200) {
+                console.log(response.data);
+                alert("Just Logged In..!!! Successfully");
+            }
         }
-      }
-    } catch (err) {
-      alert(err);
+    } catch (error) {
+        // Handle specific error cases
+        if (error.response) {
+            // Server responded with an error status code
+            console.error("Server Error:", error.response.data);
+            alert("Login Failed: " + error.response.data.message);
+        } else if (error.request) {
+            // No response received from server
+            console.error("Network Error:", error.request);
+            alert("Login Failed: Network Error");
+        } else {
+            // Something else went wrong
+            console.error("Error:", error);
+            alert("Login Failed: Something went wrong");
+        }
     }
-  };
+};
+
 
   return (
     <section
