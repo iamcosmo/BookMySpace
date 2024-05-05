@@ -18,18 +18,12 @@ const venueOwnerSchema = new mongoose.Schema(
     //   type: String,
     //   required: true,
     // },
-    username: {
-      type: String,
-      required: true,
+    VenueOwner: {
+      type: Schema.Types.ObjectId,
+      ref: "UserData",
     },
-    email: {
+    OwnerId: {
       type: String,
-      required: true,
-      unique: true,
-    },
-    password: {
-      type: String,
-      required: true,
     },
     venueName: {
       type: String,
@@ -59,7 +53,14 @@ const venueOwnerSchema = new mongoose.Schema(
       type: [availabilitySchema],
       default: [],
     },
-    photos: {
+    venuePhoto: {
+      type: String,
+    },
+    venueVideo: {
+      type: String,
+      required: true,
+    },
+    venuePhotos: {
       type: [String],
       default: [],
     },
@@ -74,6 +75,9 @@ const venueOwnerSchema = new mongoose.Schema(
     role: {
       type: Number,
       default: 2,
+    },
+    rating: {
+      type: Number,
     },
   },
   { timestamps: true }
