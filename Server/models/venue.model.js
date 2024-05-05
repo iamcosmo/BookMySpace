@@ -11,6 +11,16 @@ const availabilitySchema = new mongoose.Schema({
     required: true,
   },
 });
+const EventTypeAndPriceSchema = new mongoose.Schema({
+  event: {
+    type: string,
+    required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+});
 
 const venueOwnerSchema = new mongoose.Schema(
   {
@@ -20,7 +30,7 @@ const venueOwnerSchema = new mongoose.Schema(
     // },
     VenueOwner: {
       type: Schema.Types.ObjectId,
-      ref: "UserData",
+      ref: "User",
     },
     OwnerId: {
       type: String,
@@ -29,15 +39,16 @@ const venueOwnerSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    venueType: {
-      type: String,
-      required: true,
+    EventTypeWithPrice: {
+      type: [EventTypeAndPriceSchema],
+      default: [],
+      // required: true,
     },
     description: {
       type: String,
       required: true,
     },
-    price: {
+    AveragePrice: {
       type: Number,
       required: true,
     },

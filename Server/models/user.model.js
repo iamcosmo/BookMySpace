@@ -29,7 +29,7 @@ const userdataSchema = mongoose.Schema({
   usertype: {
     type: String,
     required: true,
-    enum: ["user", "caterer", "photographer", "decorator"], 
+    enum: ["user", "caterer", "photoGrapher", "decorator","venueOwner"], 
   },
   password: {
     type: String,
@@ -37,5 +37,5 @@ const userdataSchema = mongoose.Schema({
   },
 });
 
-const UserDataModel = mongoose.model("UserData", userdataSchema);
+const UserDataModel = mongoose.model("User", userdataSchema);
 export default UserDataModel
