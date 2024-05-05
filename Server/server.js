@@ -7,6 +7,7 @@ import { connectDB } from "./config/db.js";
 import { Photographer } from "./models/photographer.model.js";
 import { TrialData } from "./models/trial.model.js";
 import authRouter from "./routes/auth.routes.js";
+import venuesRouter from './routes/venues.routes.js';
 
 
 dotenv.config();
@@ -22,13 +23,14 @@ app.use(morgan("dev"));
 connectDB();
 
 
-app.use("/auth",authRouter)
+app.use("/auth", authRouter);
+app.use("/api/v1/venues", venuesRouter);
 
 
 
 // Routes
 app.get("/", (req, res) => {
-  res.send("<h1>hii welcome to ecommerece webapp</h1>");
+  res.send("<h1>hii welcome to  webapp</h1>");
 });
 
 app.post("/data", async (req, res) => {

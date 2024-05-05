@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema} from "mongoose";
 
 const availabilitySchema = new mongoose.Schema({
   date: {
@@ -13,7 +13,7 @@ const availabilitySchema = new mongoose.Schema({
 });
 const EventTypeAndPriceSchema = new mongoose.Schema({
   event: {
-    type: string,
+    type: String,
     required: true,
   },
   price: {
@@ -34,6 +34,7 @@ const venueOwnerSchema = new mongoose.Schema(
     },
     OwnerId: {
       type: String,
+      required:true,
     },
     venueName: {
       type: String,
@@ -66,6 +67,7 @@ const venueOwnerSchema = new mongoose.Schema(
     },
     venuePhoto: {
       type: String,
+      required:true,
     },
     venueVideo: {
       type: String,
@@ -94,8 +96,8 @@ const venueOwnerSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Venues", venueOwnerSchema);
-
+const venueModel = mongoose.model("Venues", venueOwnerSchema);
+export default venueModel;
 //DEMO JSON DATA
 // [
 //   {
