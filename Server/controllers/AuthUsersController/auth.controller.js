@@ -1,11 +1,11 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import UserDataModel from "../models/user.model.js";
+import UserDataModel from "../../models/user.model.js";
 import {
   hashPassword,
   comparePassword,
   compareUserType,
-} from "../helpers/auth.helper.js";
+} from "../../helpers/auth.helper.js";
 
 const createToken = (_id) => {
   return jwt.sign({ _id }, process.env.JWT_SECRET, { expiresIn: "2h" });
@@ -31,15 +31,17 @@ export const signUpUser = async (req, res) => {
       });
 
       const token = createToken(user._id);
-      return res
-        .status(200)
-        .json({ user: {
+      return res.status(200).json({
+        user: {
           firstname: user.name.firstname,
           lastname: user.name.lastname,
           email: user.email,
           contact: user.contact,
           usertype: usertype,
-        }, token, message: "Successfully submitted" });
+        },
+        token,
+        message: "Successfully submitted",
+      });
     } else {
       return res.status(400).json({ message: "Email already exists" });
     }
@@ -66,7 +68,10 @@ export const logInUser = async (req, res) => {
     if (!user) {
       return res
         .status(401)
-        .send({ success: false, message: "User Doesn't Exists!! Please SignUP" });
+        .send({
+          success: false,
+          message: "User Doesn't Exists!! Please SignUP",
+        });
     }
 
     const typeMatch = await compareUserType(usertype, user.usertype);

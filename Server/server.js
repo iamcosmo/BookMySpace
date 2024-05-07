@@ -6,8 +6,8 @@ import dotenv from "dotenv";
 import { connectDB } from "./config/db.js";
 import { Photographer } from "./models/photographer.model.js";
 import { TrialData } from "./models/trial.model.js";
-import authRouter from "./routes/auth.routes.js";
-import venuesRouter from './routes/venues.routes.js';
+import authRouter from "./routes/AuthRoutes/auth.routes.js";
+import venuesRouter from './routes/VenueRoutes/venues.routes.js';
 
 
 dotenv.config();

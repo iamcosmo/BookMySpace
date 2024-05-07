@@ -1,12 +1,12 @@
 
-import venueModel from "../../models/venue.model.js";
+import venueModel from "./../../models/venue.model.js";
 import {
   hashPassword,
   comparePassword,
   compareUserType,
 } from "../../helpers/auth.helper.js";
 
-
+//venueOwner add his venue in our platform 
 export const registerNewVenue = async (req,res) => {
   try {
     const {
@@ -51,7 +51,83 @@ export const registerNewVenue = async (req,res) => {
         })
     }
 }
+//get one venue details
+export const GetOneVenueDetails = async (req,res) => {
+  try {
+    const id = req.params.id;
+    const Venue = await venueModel.findById(id);
+        if (Venue) {
+           return res.status(201).json({
+             success: true,
+             message: "new Venue Details Fetching  is successfull",
+             Venue,
+           });
+        } else {
+            return res.status(300).json({
+              success: false,
+              message: "Venue not found ,by this id",
+            });
+        }
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "error in fetching Single Venue data from backend",
+            error
+        })
+    }
+}
+//edit a venue by venueowner
 
+//venueOwner add his venue in our platform 
+export const editExistingVenue = async (req,res) => {
+  try {
+    const id = req.params.id;
+    const {
+      OwnerId,
+      venueName,
+      description,
+      AveragePrice,
+      capacity,
+      location,
+      venuePhoto,
+      venueVideo,
+    } = req.body;
+    if (true) {
+      const updatedVenue = await venueModel.findByIdAndUpdate(
+        id,
+        {
+          $set: {
+            OwnerId,
+            venueName,
+            description,
+            AveragePrice,
+            capacity,
+            location,
+            venuePhoto,
+            venueVideo,
+          },
+        },
+        { new: true }
+      );
+      return res.status(201).json({
+        success: true,
+        message: "new Venue registration in our web page is successfull",
+        Venue,
+      });
+    } else {
+      return res.status(300).json({
+        success: false,
+        message: "Venue not found ,by this id so we cant update the venue",
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "error in editing in  Single Venue data",
+      error,
+    });
+  }
+}
 
 
 // export const signUpUser = async (req, res) => {
