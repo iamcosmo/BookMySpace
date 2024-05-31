@@ -1,6 +1,13 @@
-# BookMySpace
+# BookMySpace Is a One stop platform for event booking and venues.
 
-# BookMySpace
+#### Team Members
+# 1- Satyapriya Mishra (Team Leader ,Mern stack developer)
+# 2- Chandan Kumar (Mern stack developer)
+\n
+\n
+\n
+# If you want to contribute to our project ,send me a mail in this gmail - mishrasatyapriya9@gmail.com
+
 
 booking availability calender react mern -----main google search
 https://github.com/mahaffey/MERN-Calendar
